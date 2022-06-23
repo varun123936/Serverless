@@ -1,0 +1,54 @@
+https://subwaytechnology.visualstudio.com/Middleware/_git/Channel/pullrequest/54794?_a=files&path=/pipeline-All.yml
+
+const chai = require('chai')
+  , assert = chai.assert
+  , expect = chai.expect
+  , should = chai.should()
+
+describe('String', () => {
+  it('should update items', function () {
+
+    const AWS = require('aws-sdk-mock');
+    AWS.mock('DynamoDB.DocumentClient', 'update', function (params, callback) {
+        callback(null, 'successfully updated items from database');
+      });
+      const { updateDynamo } = require('../src/handler/updateDynamo')
+      const event={
+        body: '{\r\n    "task":"data base",\r\n    "done":false\r\n}',
+        pathParameters: { id: 'c803b950-a122-11ec-8b8c-a5e9720503cb' }
+      }
+      updateDynamo(event,{}, (err, res) => {
+        //console.log(res);
+        //res.should.be.equal('successfull updated items from database');
+        expect(res.statusCode).to.be.equal(200);
+        //assert.equal(res, 'successfull updated items from database');
+        //AWS.restore();)
+  
+  
+      })
+    })
+    it('should give error', function () {
+
+      const AWS = require('aws-sdk-mock');
+      AWS.mock('DynamoDB.DocumentClient', 'update', function (params, callback) {
+          callback(null, 'successfully updated items from database');
+        });
+        const { updateDynamo } = require('../src/handler/updateDynamo')
+        const event={
+          body: '{\r\n    "task":56,\r\n    "done":"false"\r\n}',
+          pathParameters: { id: 'c803b950-a122-11ec-8b8c-a5e9720503cb' }
+        }
+        updateDynamo(event, {}, (err, res) => {
+          //console.log(res);
+          //res.should.be.equal('successfull updated items from database');
+          expect(res.statusCode).to.be.equal(400);
+          //assert.equal(res, 'successfull updated items from database');
+          //AWS.restore();)
+    
+    
+        })
+      })
+  })
+  
+  
+  

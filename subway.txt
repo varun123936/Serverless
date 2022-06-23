@@ -1,0 +1,60 @@
+https://app.swaggerhub.com/apis/Subway/Digital-Offers/2.6.0-future#/default/get_gc_campaigns__storeId_
+
+
+https://lucid.app/lucidchart/ce38f47c-dd7d-43ed-8acb-1694727e09bb/edit?invitationId=inv_090b3295-8fd1-48f1-bab7-dfa1f0c1b467&page=0_0#
+
+https://lucid.app/documents#/dashboard
+
+lucid.app/lucidchart/5750439f-d755-4484-bae1-0e94a11f1652/edit?page=epjF0DnNmEiz#
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-south-1
+  environment: ${self:custom.settings}
+  iamRoleStatements:
+   - Effect: "Allow"
+     Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+     Resource:
+      - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.POSTS_TABLE}"
+
+functions:
+  createPost:
+    handler: handler.createPost
+    events:
+    - http:
+        path: /post
+        method: post
+        cors: true
+
+resources:
+  Resources:
+    PostsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.settings.POSTS_TABLE}
+
+
+    # Enabling ApiGateway CloudWatch Logs 
+  logs: 
+    restApi:
+      fullExecutionData: false  
+
+  # Enabling ApiGateway Metrics Logs
+  apiGateway:
+    metrics: true

@@ -1,0 +1,22 @@
+exports.handler = async (event) => {
+    const ssm = new (require('aws-sdk/clients/ssm'))();
+    var params = {
+        Name: '/my-app/prod/db-url',
+        Value: 'Changed to Varun teja',
+        Overwrite: true,
+        Type: 'String'
+    };
+
+    //update existing url
+    await ssm.putParameter(params).promise();
+    
+    const data= await ssm.getParameters({
+        Names: ['/my-app/prod/db-url']
+    }).promise();
+    
+    const response = {
+        statusCode: 200,
+        body: data,
+    };
+    return response;
+};

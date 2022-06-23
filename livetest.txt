@@ -1,0 +1,1 @@
+https://subwaytechnology.visualstudio.com/Middleware/_git/Loyalty/pullrequest/58151?_a=files&path=/Serverless/functions/loyalty-health-check.yml

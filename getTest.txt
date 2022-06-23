@@ -1,0 +1,45 @@
+const chai = require('chai')
+    , assert = chai.assert
+    , expect = chai.expect
+    , should = chai.should()
+
+describe('String', () => {
+    it.only('should get items', function () {
+
+        const AWS = require('aws-sdk-mock');
+       
+    const dynamoDbGetResponse={Item: {
+        createdAt: '2022-03-15T14:01:19.167Z',
+        task: 'final check',
+        id: '6354d220-a468-11ec-9a09-6741955036d2',
+        done: true,
+        updatedAt: '2022-03-15T14:01:19.167Z'
+      }}
+        AWS.mock('DynamoDB.DocumentClient', 'get', function (event, callback) {
+            console.log(event);        
+            callback(null,dynamoDbGetResponse);
+        });
+        const { getDynamo } = require('../src/handler/getDynamo')
+        const event={
+            body: null,
+            pathParameters: { id: 'c75c3630-a479-11ec-9743-0bdb056e5ba0' }
+          }
+        getDynamo(event, {}, (err, res) => {
+            //console.log(res);
+            //res.should.be.equal('successfully got items from database');
+            expect(res.statusCode).to.be.equal(200);
+            const body=JSON.parse(res.body);
+            console.log(body)
+            expect(body.task).to.be.equal('final check');
+            expect(body.done).to.be.equal(true);
+
+            //assert.equal(res, 'successfully got items from database');
+            //AWS.restore();)
+
+
+        })
+    })
+    
+})
+
+

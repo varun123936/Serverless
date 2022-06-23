@@ -1,0 +1,31 @@
+const chai = require('chai')
+  , assert = chai.assert
+  , expect = chai.expect
+  , should = chai.should()
+
+describe('String', () => {
+  it('should list items', function () {
+
+    const AWS = require('aws-sdk-mock');
+    AWS.mock('DynamoDB.DocumentClient', 'scan', function (params, callback) {
+        callback(null, 'successfully listed items from database');
+      });
+      const { listDynamo } = require('../src/handler/listDynamo')
+      const event={
+        body: '{\r\n    "task":"test working",\r\n    "done":true\r\n,  \r\n  "id":4578 }'
+      }
+      listDynamo(event, {}, (err, res) => {
+        //console.log(res);
+        //res.should.be.equal('successfull listed items from database');
+        expect(res.statusCode).to.be.equal(200);
+        //assert.equal(res, 'successfull listed items from database');
+        //AWS.restore();)
+  
+  
+      })
+    })
+  
+  })
+  
+  
+  

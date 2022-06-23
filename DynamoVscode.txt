@@ -1,0 +1,4 @@
+1.Create a table in us-east-1
+2.Table name:Users
+3.create a folder,name of the folder is DynamoVsCodeS3
+4.https://youtu.be/SU4dZ-qgR1Y
